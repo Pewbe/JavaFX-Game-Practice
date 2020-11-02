@@ -33,13 +33,13 @@ public class Main extends Application{
 	
 	Rectangle rectEyeR, rectEyeL, rectBody;
 	TextField txtFull, txtFun, txtMoney, txtFood;
-	Button btnMeal, btnTalk, btnWork, btnShop;
+	Button btnMeal, btnTalk, btnWork, btnShop, btnTest;
 	Label lbState, lbFull, lbFun, lbMoney, lbFood;
 	TextArea txtaTalk;
 	Integer full, fun, money, food;
 	
 	public Pane getPane(){
-		full = 90;//배부름
+		full = 100;//배부름
 		fun = 100;//재미
 		money = 0;//돈
 		food = 5;//가진 밥
@@ -58,6 +58,7 @@ public class Main extends Application{
 		btnTalk = new Button( "대화" );
 		btnWork = new Button( "돈벌기" );
 		btnShop = new Button( "상점" );
+		btnTest = new Button( "테스트(상태-1)" );
 		
 		lbFull = new Label("배부름");
 		lbFun = new Label("재미");
@@ -65,7 +66,7 @@ public class Main extends Application{
 		lbFood = new Label("밥");
 		
 		Label lblName = new Label( name );
-		ToolBar tool = new ToolBar( lblName, btnMeal, btnTalk, btnWork, btnShop, new Label("이름: "), lbState );
+		ToolBar tool = new ToolBar( lblName, btnMeal, btnTalk, btnWork, btnShop, new Label("이름: "), lbState, btnTest );
 		txtaTalk = new TextArea();
 		AnchorPane apane = new AnchorPane( rectBody, rectEyeR, rectEyeL, txtaTalk, txtFull, txtFun, txtMoney, lbFull, lbFun, lbMoney, lbFood, txtFood );
 		BorderPane bpane = new BorderPane();
@@ -114,6 +115,11 @@ public class Main extends Application{
 		
 		btnMeal.setOnAction( ev -> btnMealHandler() );
 		btnTalk.setOnAction( ev -> btnTalkHandler() );
+		btnWork.setOnAction( ev -> money++ );
+		btnTest.setOnAction( ev -> {
+			full--;
+			fun--;
+		});
 		
 		return bpane;
 	}
@@ -132,7 +138,7 @@ public class Main extends Application{
 		Talk talk = new Talk();
 		talk.dialogList();
 		
-		int rand = (int)(Math.random()*(talk.dialog.size()+1));
+		int rand = (int)(Math.random()*(talk.dialog.size()));
 		
 		txtaTalk.appendText( talk.dialog.get(rand) );
 	}
@@ -143,23 +149,31 @@ public class Main extends Application{
 		fulled.showAndWait();
 	}
 	class Task implements Runnable{
+		boolean isTextSetted;
+		
 		public void run() {
 			while( true ){
-				if( full == 70 && fun == 70 ) {
-					Platform.runLater( () -> {
-						lbState.setText( "보통" );
-						lbState.setTextFill( Color.YELLOW );
-					});
+				if( (full <= 70 && full > 30) && (fun <= 70 && fun > 30) ) {
+					if( !isTextSetted ) {
+						Platform.runLater( () -> {
+							lbState.setText( "보통" );
+							lbState.setTextFill( Color.YELLOW );
+						});
 					
-					txtaTalk.appendText("현재" + name +"의 상태가 보통입니다.\n");
+						txtaTalk.appendText("현재" + name +"의 상태가 보통입니다.\n");
+						isTextSetted = true;
+					}
 				}
-				if( full == 30 && fun == 30 ) {
-					Platform.runLater( () -> {
-						lbState.setText( "나쁨" );
-						lbState.setTextFill( Color.CRIMSON );
-					});
+				if( full <= 30 && fun <= 30 ) {
+					if( !isTextSetted ) {
+						Platform.runLater( () -> {
+							lbState.setText( "나쁨" );
+							lbState.setTextFill( Color.CRIMSON );
+						});
 
-					txtaTalk.appendText( name + "의 상태가 나쁩니다! 밥을 주거나 놀아줘서 상태를 화복시켜주세요.\n");
+						txtaTalk.appendText( name + "의 상태가 나쁩니다! 밥을 주거나 놀아줘서 상태를 화복시켜주세요.\n");
+						isTextSetted = true;
+					}
 				}
 				txtFull.setText( full.toString() );
 				txtFun.setText( fun.toString() );
