@@ -42,7 +42,7 @@ public class Main extends Application{
 		full = 100;//배부름
 		fun = 100;//재미
 		money = 0;//돈
-		food = 5;//가진 밥
+		food = 500;//가진 밥
 		
 		rectBody = new Rectangle( 290, 255, 140, 120 );
 		rectEyeR = new Rectangle( 310, 285, 10, 50 );
@@ -66,7 +66,7 @@ public class Main extends Application{
 		lbFood = new Label("밥");
 		
 		Label lblName = new Label( name );
-		ToolBar tool = new ToolBar( lblName, btnMeal, btnTalk, btnWork, btnShop, new Label("이름: "), lbState, btnTest );
+		ToolBar tool = new ToolBar( lblName, btnMeal, btnTalk, btnWork, btnShop, new Label("상태: "), lbState, btnTest );
 		txtaTalk = new TextArea();
 		AnchorPane apane = new AnchorPane( rectBody, rectEyeR, rectEyeL, txtaTalk, txtFull, txtFun, txtMoney, lbFull, lbFun, lbMoney, lbFood, txtFood );
 		BorderPane bpane = new BorderPane();
@@ -129,8 +129,14 @@ public class Main extends Application{
 		else {
 			GiveFood givefood = new GiveFood( food );
 			int ateFood = givefood.execute();
+			
 			food -= ateFood;
 			full += ateFood;
+			
+			if( full > 100 )
+				full = 100;
+
+			txtFull.setText( full.toString() );
 			txtFood.setText( food.toString() );
 		}
 	}
@@ -141,6 +147,8 @@ public class Main extends Application{
 		int rand = (int)(Math.random()*(talk.dialog.size()));
 		
 		txtaTalk.appendText( talk.dialog.get(rand) );
+		if( fun < 100 )
+			fun++;
 	}
 	public void fulledAlert() {
 		Alert fulled = new Alert( AlertType.ERROR );

@@ -32,18 +32,20 @@ public class GiveFood {
 		return hbox;
 	}
 	public void okHandler() {
-		if( isStringInt( giveFood.getText() ) == false || Integer.parseInt( giveFood.getText() ) <= 0 || Integer.parseInt( giveFood.getText() ) > haveFood ) {
+		int toGive = Integer.parseInt( giveFood.getText() );
+		
+		if( isStringInt( giveFood.getText() ) == false || toGive <= 0 || toGive > haveFood ) {
 			if( isStringInt( giveFood.getText() ) == false ) {
-				notIntAlert();
+				foodAlert("숫자만 입력할 수 있습니다.");
 				return;
 			}
-			if( Integer.parseInt( giveFood.getText() ) <= 0 )
-				tooSmallAlert();
-			if( Integer.parseInt( giveFood.getText() ) > haveFood )
-				tooMuchAlert();
+			if( toGive <= 0 )
+				foodAlert("1이상은 먹여야 합니다.");
+			if( toGive > haveFood )
+				foodAlert("밥이 부족합니다. 현재 " + haveFood + "개의 밥을 가지고 있습니다.");
 		}
 		else {
-			food = Integer.parseInt( giveFood.getText() );
+			food = toGive;
 			stg.close();
 		}
 	}
@@ -59,22 +61,10 @@ public class GiveFood {
 		stg.showAndWait();
 		return food;
 	}
-	public void tooSmallAlert() {
+	public void foodAlert( String content ) {
 		Alert tooSmall = new Alert( AlertType.ERROR );
 		
-		tooSmall.setHeaderText("1이상은 먹여야 합니다.");
+		tooSmall.setHeaderText( content );
 		tooSmall.showAndWait();
-	}
-	public void tooMuchAlert() {
-		Alert tooMuch = new Alert( AlertType.ERROR );
-		
-		tooMuch.setHeaderText("밥이 부족합니다. 현재 " + haveFood + "개의 밥을 가지고 있습니다.");
-		tooMuch.showAndWait();
-	}
-	public void notIntAlert() {
-		Alert notInt = new Alert( AlertType.ERROR );
-		
-		notInt.setHeaderText("숫자만 입력할 수 있습니다.");
-		notInt.showAndWait();
 	}
 }
