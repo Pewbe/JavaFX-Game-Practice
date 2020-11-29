@@ -34,8 +34,8 @@ public class GiveFood {
 	public void okHandler() {
 		int toGive = Integer.parseInt( giveFood.getText() );
 		
-		if( isStringInt( giveFood.getText() ) == false || toGive <= 0 || toGive > haveFood ) {
-			if( isStringInt( giveFood.getText() ) == false ) {
+		if( !isStringInt( giveFood.getText() ) || toGive <= 0 || toGive > haveFood ) {
+			if( !isStringInt( giveFood.getText() ) ) {
 				foodAlert("숫자만 입력할 수 있습니다.");
 				return;
 			}
